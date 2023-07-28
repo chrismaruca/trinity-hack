@@ -15,7 +15,7 @@ body {
 
 /* Header styling */
 
-.header {
+header {
     background-color: #004aad;
     border: 2px solid black;
     height: 150px;
