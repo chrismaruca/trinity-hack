@@ -2,7 +2,7 @@
 
 html {
     background-color: gray;
-    font-size: 12px;
+    font-size: 13px;
     font-family: "Open Sans", sans-serif;
 }
 
@@ -51,12 +51,39 @@ h2 {
 
 h3 {
     color: black;
-    font-size: 24px;
+    font-size: 26px;
 }
 
 /* Mission control */
 article.mission-control {
     background-color: lightslategray;
+}
+
+div.data-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 10px 0px;
+    max-width: 100%;
+}
+
+div.data-box {
+    text-align: center;
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 40%;
+    min-width: 200px;
+    height: 200px;
+}
+
+#pos-box {
+    background-color: steelblue;
+}
+
+#gas-box {
+    background-color: lightgreen;
 }
 
 /* Design */
