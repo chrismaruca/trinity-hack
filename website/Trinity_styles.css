@@ -1,0 +1,66 @@
+/* Main setup */
+
+html {
+    background-color: gray;
+    font-size: 12px;
+    font-family: "Open Sans", sans-serif;
+}
+
+body {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Header styling */
+
+.header {
+    background-color: #004aad;
+    border: 2px solid black;
+    height: 150px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header img, #spacer {
+    height:120px;
+    width:120px;
+    padding:10px;
+}
+
+h1 {
+    text-align:center;
+    font-size: 60px;
+    color: white;
+}
+
+/* Article styling */
+article {
+    background-color: white;
+    border: 2px solid black;
+    padding: 10px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 32px;
+    color: black;
+}
+
+h3 {
+    color: black;
+    font-size: 24px;
+}
+
+/* Mission control */
+article.mission-control {
+    background-color: lightslategray;
+}
+
+/* Design */
+article.design {
+    background-color: #ffde59;
+}
+
