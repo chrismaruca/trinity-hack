@@ -73,9 +73,9 @@ div.data-box {
     text-align: center;
     border: 2px solid black;
     border-radius: 10px;
-    width: 40%;
+    width: 20%;
     min-width: 200px;
-    height: 200px;
+    min-height: 250px;
 }
 
 #pos-box {
@@ -84,6 +84,18 @@ div.data-box {
 
 #gas-box {
     background-color: lightgreen;
+}
+
+#temp-box {
+    background-color: lightblue;
+}
+
+#hum-box {
+    background-color: lightgray;
+}
+
+.data {
+    font-size: 30px;
 }
 
 /* Design */
