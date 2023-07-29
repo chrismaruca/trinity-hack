@@ -61,23 +61,42 @@ int readDistance() {
 // Displays relevant data onto the OLED screen
 void displayData(double dist, double temp, double hum, int gas) {
   display.clearDisplay();
+    
   // Temperature & Humidity
   display.setTextSize(1);
-  display.setCursor(0, 0);
-  display.println("T: " + String(temp, 1) + "C, H: " + String(hum, 1));
+  display.setCursor(0, 4);
+  //display.println("T: " + String(temp, 1) + " C,"); // Celsius
+  display.println("T: " + String(temp * 9 / 5 + 32, 1) + " F,"); // Fahrenheit
+  display.setCursor(72, 4);
+  display.println("H: " + String(hum, 1) + "%");
   display.drawLine(0, 15, 128, 15, WHITE);
 
   // Distance
-  display.setTextSize(2);
   display.setCursor(32, 16);
   display.println("Distance:");
-  display.setCursor(32, 32);
-  display.println(" " + String(dist, 2) + " cm");
-  display.setCursor(32, 48);
-  display.println(" " + String(dist / 2.54, 2) + " in");
+  
+  display.setTextSize(2);
+  display.setCursor(32, 24);
+  display.println(String(dist, 0) + " cm");
+  display.setCursor(32, 39);
+  display.println(String(dist / 2.54, 0) + " in");
+  
+  // Gas
+  String lvl; // Store gas safety lvl
+  if (gas >= 750) {
+    lvl = "Danger!";
+  } else if (gas >= 250) {
+    lvl = "Risky";
+  } else {
+    lvl = "Safe";
+  }
+  display.setTextSize(1);
+  display.drawLine(0, 54, 128, 54, WHITE);
+  display.setCursor(0, 56);
+  display.println("Gas: " + String(gas) + " ppm, " + lvl);
   
   // Display Trinity logo
-  display.drawBitmap(0, 32, Trinity_logo, 32, 32, WHITE);
+  display.drawBitmap(0, 20, Trinity_logo, 32, 32, WHITE);
   display.display(); 
 }
 
@@ -119,9 +138,9 @@ void loop() {
   publisher.store("gas", gaslvl);
   publisher.store("temp", gaslvl % 50);
   publisher.store("hum", gaslvl % 100);
-  gaslvl++;
+  gaslvl += 5;
 
-  displayData(distance / 100.0, gaslvl, gaslvl, gaslvl); 
+  displayData(distance / 100.0, gaslvl % 50, gaslvl % 100, gaslvl); 
   
   if (gaslvl > 1000) {
     gaslvl = 0;
