@@ -1,6 +1,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include "AM232X.h"
 #include "Trinity_HackPublisher.h"
 #include "secrets.h"
 
@@ -8,6 +9,7 @@
 #define ECHO_PIN 27
 #define TRIG_PIN 12
 
+#define SOUND_SPEED 0.0343
 int distance; // micrometers
 
 // OLED
@@ -37,7 +39,17 @@ HackPublisher publisher("trinity", true);
 
 
 // Gas sensor
-int gaslvl = 0;
+//#define GAS_PIN A7
+
+
+// Temperature sensor
+AM232X AM2320;
+double temperature = 0;
+double humidity = 0;
+
+
+//Misc
+int testval = 0;
 
 
 // Returns distance from ultrasonic sensor in micrometers
@@ -48,15 +60,24 @@ int readDistance() {
   delayMicroseconds(2);
   // Sets the trig pin to HIGH for 10 ms
   digitalWrite(TRIG_PIN, HIGH);
-  delay(10);
+  delayMicroseconds(10);
   digitalWrite(TRIG_PIN, LOW);
 
   // Reads the sound wave travel time in microseconds
   duration = pulseIn(ECHO_PIN, HIGH);
 
-  // Calculates and returns the distance
-  return duration * 3.43 / 2;
+  // Calculates and returns the distance in micrometers
+  return duration * SOUND_SPEED * 100 / 2;
 }
+
+// Returns analog gas reading from sensor
+/*
+int readGas() {
+  int gas = analogRead(GAS_PIN);
+  Serial.println(gas);
+  
+  return gas;
+}*/
 
 // Displays relevant data onto the OLED screen
 void displayData(double dist, double temp, double hum, int gas) {
@@ -114,6 +135,14 @@ void setup() {
   }
   delay(1000);
   display.setTextColor(WHITE);
+
+  // Set up AM2320
+  if (!AM2320.begin()) {
+    Serial.println("Sensor not found");
+    while (1);
+  }
+  AM2320.wakeUp();
+  delay(1000);
     
   // Connect to wifi
   WiFi.begin(ssid, password);
@@ -132,20 +161,25 @@ void setup() {
 
 void loop() {
   distance = readDistance(); // Read ultrasonic sensor data into distance (micrometers)
+  
+  AM2320.read(); // Read AM2320 data
+  temperature = int(AM2320.getTemperature() * 10) / 10.0; // Get temperature and round to one decimal
+  humidity = int(AM2320.getHumidity() * 10) / 10.0; // Get humidity and round to one decimal
+  
   //Serial.println(distance / 100.0); // Print in cm
   publisher.store("dist", distance / 100.0); // Send over wifi in cm
-  publisher.store("gas", gaslvl);
-  publisher.store("temp", gaslvl % 50);
-  publisher.store("hum", gaslvl % 100);
+  publisher.store("gas", testval);
+  publisher.store("temp", temperature);
+  publisher.store("hum", humidity);
   publisher.send();
   
   // Display on OLED screen
-  displayData(distance / 100.0, gaslvl % 50, gaslvl % 100, gaslvl); 
+  displayData(distance / 100.0, temperature, humidity, testval); 
 
   // Dummy data
-  gaslvl += 5;
-  if (gaslvl > 1000) {
-    gaslvl = 0;
+  testval += 5;
+  if (testval > 1000) {
+    testval = 0;
   }
   
   delay(250);

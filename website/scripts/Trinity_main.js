@@ -5,6 +5,7 @@ let gas_box = document.getElementById("gas-box");
 let temp = document.getElementById("temp");
 let temp_f = document.getElementById("temp-f");
 
+// Check to see when data updates on the website
 const observer = new MutationObserver((mutations) => {
     for (mutation of mutations) {
         if (mutation.type === "childList") {
@@ -22,8 +23,8 @@ const observer = new MutationObserver((mutations) => {
             // Convert distance from centimeters to inches rounded to 2 decimal places
             dist_inches.textContent = Math.round(dist.textContent / 0.0254) / 100;
 
-            // Convert temperature from Celsius to fahrenheit rounded to 2 decimal places
-            temp_f.textContent = Math.round(temp.textContent * 900) / 500 + 32;
+            // Convert temperature from Celsius to fahrenheit rounded to 1 decimal place
+            temp_f.textContent = Math.round(temp.textContent * 90 / 5) / 10 + 32;
         }
     }
 })

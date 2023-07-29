@@ -103,3 +103,16 @@ article.design {
     background-color: #ffde59;
 }
 
+
+/* Gallery */
+article.gallery {
+    background-color: #417edc;
+}
+article.gallery h2 {
+    color: white;
+}
+
+/* Slideshow */
+.prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
+}
