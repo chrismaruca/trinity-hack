@@ -15,6 +15,6 @@ Contains the styling for the mission control website
 ## Trinity_main.js
 Contains the javascript code for the mission control website
 
-## Trinity_communication.js
+## communication_with_reconnect.js
 Handles the communication between the ESP32 and the mission control website
 
