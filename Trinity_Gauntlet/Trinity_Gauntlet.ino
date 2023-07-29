@@ -33,7 +33,7 @@ const unsigned char Trinity_logo [] PROGMEM = {
 const char* ssid = SECRET_SSID;
 const char* password = SECRET_PW;
 
-HackPublisher publisher("trinity");
+HackPublisher publisher("trinity", true);
 
 
 // Gas sensor
@@ -114,8 +114,8 @@ void setup() {
 
 void loop() {
   distance = readDistance(); // Read ultrasonic sensor data into distance
-  Serial.println(distance / 100.0); // Print in cm
-  publisher.store("pos", distance / 100.0); // Send over wifi in cm
+  //Serial.println(distance / 100.0); // Print in cm
+  publisher.store("dist", distance / 100.0); // Send over wifi in cm
   publisher.store("gas", gaslvl);
   gaslvl++;
 
