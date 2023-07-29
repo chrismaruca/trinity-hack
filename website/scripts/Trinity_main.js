@@ -1,6 +1,6 @@
 
-let position = document.getElementById("pos");
-let position_inches = document.getElementById("pos-in");
+let dist = document.getElementById("dist");
+let dist_inches = document.getElementById("dist-in");
 let gas = document.getElementById("gas");
 let gas_box = document.getElementById("gas-box");
 
@@ -17,9 +17,8 @@ const observer = new MutationObserver((mutations) => {
                 gas_box.style.backgroundColor = "lightgreen";
             }
 
-            position_inches.textContent = Math.round(position.textContent / 0.0254) / 100;
+            dist_inches_inches.textContent = Math.round(dist_inches.textContent / 0.0254) / 100;
         }
-        
     }
 })
 
