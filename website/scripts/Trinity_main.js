@@ -17,7 +17,7 @@ const observer = new MutationObserver((mutations) => {
                 gas_box.style.backgroundColor = "lightgreen";
             }
 
-            dist_inches_inches.textContent = Math.round(dist_inches.textContent / 0.0254) / 100;
+            dist_inches.textContent = Math.round(dist.textContent / 0.0254) / 100;
         }
     }
 })
