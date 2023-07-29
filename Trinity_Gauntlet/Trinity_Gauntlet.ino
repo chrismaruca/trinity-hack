@@ -117,6 +117,8 @@ void loop() {
   //Serial.println(distance / 100.0); // Print in cm
   publisher.store("dist", distance / 100.0); // Send over wifi in cm
   publisher.store("gas", gaslvl);
+  publisher.store("temp", gaslvl % 50);
+  publisher.store("hum", gaslvl % 100);
   gaslvl++;
 
   displayData(distance / 100.0, gaslvl, gaslvl, gaslvl); 
