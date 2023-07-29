@@ -86,7 +86,7 @@ void displayData(double dist, double temp, double hum, int gas) {
   if (gas >= 750) {
     lvl = "Danger!";
   } else if (gas >= 250) {
-    lvl = "Risky";
+    lvl = "Unsafe";
   } else {
     lvl = "Safe";
   }
@@ -115,7 +115,6 @@ void setup() {
   delay(1000);
   display.setTextColor(WHITE);
     
-
   // Connect to wifi
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
@@ -132,21 +131,22 @@ void setup() {
 }
 
 void loop() {
-  distance = readDistance(); // Read ultrasonic sensor data into distance
+  distance = readDistance(); // Read ultrasonic sensor data into distance (micrometers)
   //Serial.println(distance / 100.0); // Print in cm
   publisher.store("dist", distance / 100.0); // Send over wifi in cm
   publisher.store("gas", gaslvl);
   publisher.store("temp", gaslvl % 50);
   publisher.store("hum", gaslvl % 100);
-  gaslvl += 5;
-
-  displayData(distance / 100.0, gaslvl % 50, gaslvl % 100, gaslvl); 
+  publisher.send();
   
+  // Display on OLED screen
+  displayData(distance / 100.0, gaslvl % 50, gaslvl % 100, gaslvl); 
+
+  // Dummy data
+  gaslvl += 5;
   if (gaslvl > 1000) {
     gaslvl = 0;
   }
   
-  publisher.send();
-
   delay(250);
 }
