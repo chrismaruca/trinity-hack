@@ -54,7 +54,7 @@ h3 {
     font-size: 26px;
 }
 
-/* Mission control */
+/* Mission control styling */
 article.mission-control {
     background-color: lightslategray;
 }
@@ -98,13 +98,16 @@ div.data-box {
     font-size: 30px;
 }
 
-/* Design */
+/* Design styling */
 article.design {
     background-color: #ffde59;
 }
 
+article.design h3 {
+    margin: 10px 0;
+}
 
-/* Gallery */
+/* Gallery styling */
 article.gallery {
     background-color: #417edc;
 }

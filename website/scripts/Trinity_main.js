@@ -13,11 +13,11 @@ const observer = new MutationObserver((mutations) => {
     for (mutation of mutations) {
         if (mutation.type === "childList") {
             // Change the background of the gas data box and the safety rating
-            if (gas.textContent >= 750) {
+            if (gas.textContent >= 75) {
                 gas_box.style.backgroundColor = "lightcoral";
                 gas_s.textContent = "Dangerous";
             }
-            else if (gas.textContent >= 250) {
+            else if (gas.textContent >= 50) {
                 gas_box.style.backgroundColor = "orange";
                 gas_s.textContent = "Unsafe";
             }

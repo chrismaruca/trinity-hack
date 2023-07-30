@@ -39,7 +39,8 @@ HackPublisher publisher("trinity", true);
 
 
 // Gas sensor
-//#define GAS_PIN A7
+#define GAS_PIN A7
+int gas = 0;
 
 
 // Temperature sensor
@@ -70,14 +71,13 @@ int readDistance() {
   return duration * SOUND_SPEED * 100 / 2;
 }
 
-// Returns analog gas reading from sensor
-/*
+// Returns analog gas reading from sensor (12 bit, 0-4095)
 int readGas() {
-  int gas = analogRead(GAS_PIN);
-  Serial.println(gas);
+  int g = analogRead(GAS_PIN);
+  Serial.println(g);
   
-  return gas;
-}*/
+  return g;
+}
 
 // Displays relevant data onto the OLED screen
 void displayData(double dist, double temp, double hum, int gas) {
@@ -103,18 +103,20 @@ void displayData(double dist, double temp, double hum, int gas) {
   display.println(String(dist / 2.54, 0) + " in");
   
   // Gas
-  String lvl; // Store gas safety lvl
-  if (gas >= 750) {
-    lvl = "Danger!";
-  } else if (gas >= 250) {
-    lvl = "Unsafe";
+  String rating; // Store gas safety rating
+  if (gas >= 75) {
+    rating = "Danger!";
+  } else if (gas >= 50) {
+    rating = "Unsafe";
   } else {
-    lvl = "Safe";
+    rating = "Safe";
   }
   display.setTextSize(1);
   display.drawLine(0, 54, 128, 54, WHITE);
   display.setCursor(0, 56);
-  display.println("Gas: " + String(gas) + " ppm, " + lvl);
+  display.println("Gas: " + String(gas) + "%,");
+  display.setCursor(72, 56);
+  display.println(rating);
   
   // Display Trinity logo
   display.drawBitmap(0, 20, Trinity_logo, 32, 32, WHITE);
@@ -166,16 +168,18 @@ void loop() {
   temperature = int(AM2320.getTemperature() * 10) / 10.0; // Get temperature and round to one decimal
   humidity = int(AM2320.getHumidity() * 10) / 10.0; // Get humidity and round to one decimal
   
+  gas = map(readGas(), 0, 4095, 0, 100); // Get the gas level and scale it from 0 - 100
+  
   //Serial.println(distance / 100.0); // Print in cm
   publisher.store("dist", distance / 100.0); // Send over wifi in cm
-  publisher.store("gas", testval);
+  publisher.store("gas", gas);
   publisher.store("temp", temperature);
   publisher.store("hum", humidity);
   publisher.send();
   
-  // Display on OLED screen
-  displayData(distance / 100.0, temperature, humidity, testval); 
-
+  // Display readings on OLED screen
+  displayData(distance / 100.0, temperature, humidity, gas); 
+  
   // Dummy data
   testval += 5;
   if (testval > 1000) {
