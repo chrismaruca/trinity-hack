@@ -4,7 +4,8 @@
 #include "AM232X.h"
 #include "Trinity_HackPublisher.h"
 #include "secrets.h"
-//#include <Adafruit_NeoPixel.h>
+#include <Adafruit_NeoPixel.h>
+
 
 // Ultrasonic sensor
 #define ECHO_PIN 27
@@ -29,12 +30,10 @@ const unsigned char Trinity_logo [] PROGMEM = {
   0x7f, 0xff, 0x7f, 0xfe, 0x1f, 0xfc, 0x1f, 0xf8, 0x07, 0xf0, 0x0f, 0xe0, 0x03, 0xc0, 0x03, 0x80
 };
 
-
 // Wifi
 const char* ssid = SECRET_SSID;
 const char* password = SECRET_PW;
 HackPublisher publisher("trinity", true);
-
 
 // Gas sensor
 #define GAS_PIN A2
@@ -44,19 +43,18 @@ const double GAS_THRESHOLD = 50.0;
 double gas = 0;
 int buzz = 0;
 
-
 // Temperature sensor
 AM232X AM2320;
 double temperature = 0;
 double humidity = 0;
 
 // NeoPixels
-#define PIN            15
+#define PIN            32
 #define NUMPIXELS      12
-//Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+#define DELAYVAL       50 // Time (in milliseconds) to pause between pixels
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+int curr_pixel = 0;
 
-//Misc
-int testval = 0;
 
 // Initialize the Buzzer
 void initBuzzer() {
@@ -187,8 +185,8 @@ void setup() {
   pinMode(ECHO_PIN, INPUT); 
   pinMode(TRIG_PIN, OUTPUT);
 
-  // NeoPixel setup
-  //pixels.begin(); // This initializes the NeoPixel library.
+  // Initialize NeoPixel library
+  pixels.begin(); 
 
   // Initialize the Buzzer
   initBuzzer();
@@ -213,12 +211,21 @@ void loop() {
   
   // Display readings on OLED screen
   displayData(distance / 100.0, temperature, humidity, gas); 
-  
-  // Dummy data
-  testval += 5;
-  if (testval > 1000) {
-    testval = 0;
+
+  // Ring LED
+  if (curr_pixel == 0) {
+    pixels.clear(); // Set all pixel colors to 'off'
   }
-  
-  delay(250);
+
+  for(int i=0; i< NUMPIXELS / 2; i++) { // For each pixel...
+    // pixels.Color() takes RGB values, from 0,0,0 up to 255,255,255
+    // Here we're using bright blue color:
+    pixels.setPixelColor(curr_pixel, pixels.Color(0, 0, 255));
+
+    pixels.show();   // Send the updated pixel colors to the hardware.
+
+    delay(DELAYVAL); // Pause before next pass through loop
+    
+    curr_pixel = (curr_pixel + 1) % NUMPIXELS;
+  }
 }
