@@ -4,18 +4,17 @@
 #include "AM232X.h"
 #include "Trinity_HackPublisher.h"
 #include "secrets.h"
+//#include <Adafruit_NeoPixel.h>
 
 // Ultrasonic sensor
 #define ECHO_PIN 27
 #define TRIG_PIN 12
-
 #define SOUND_SPEED 0.0343
 int distance; // micrometers
 
 // OLED
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
-
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 // 'Trinity_logo', 32x32px
@@ -34,13 +33,16 @@ const unsigned char Trinity_logo [] PROGMEM = {
 // Wifi
 const char* ssid = SECRET_SSID;
 const char* password = SECRET_PW;
-
 HackPublisher publisher("trinity", true);
 
 
 // Gas sensor
-#define GAS_PIN A7
-int gas = 0;
+#define GAS_PIN A2
+#define BUZZER_PIN 13
+const double DANGER_THRESHOLD = 75.0;
+const double GAS_THRESHOLD = 50.0;
+double gas = 0;
+int buzz = 0;
 
 
 // Temperature sensor
@@ -48,10 +50,35 @@ AM232X AM2320;
 double temperature = 0;
 double humidity = 0;
 
+// NeoPixels
+#define PIN            15
+#define NUMPIXELS      12
+//Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
 //Misc
 int testval = 0;
 
+// Initialize the Buzzer
+void initBuzzer() {
+  pinMode(BUZZER_PIN, OUTPUT);
+  digitalWrite(BUZZER_PIN, LOW);
+}
+
+// Play the buzzer sound in 500 ms intervals when gas is detected
+void playBuzzer(int g) {
+  if (buzz > 0) {
+    buzz--;
+  }
+  
+  if (buzz == 0 && g >= GAS_THRESHOLD)
+  {
+    digitalWrite(BUZZER_PIN, HIGH);
+    buzz = 4;
+  }
+  else if (buzz <= 2) {
+    digitalWrite(BUZZER_PIN, LOW);
+  }
+}
 
 // Returns distance from ultrasonic sensor in micrometers
 int readDistance() {
@@ -80,7 +107,7 @@ int readGas() {
 }
 
 // Displays relevant data onto the OLED screen
-void displayData(double dist, double temp, double hum, int gas) {
+void displayData(double dist, double temp, double hum, double gas) {
   display.clearDisplay();
     
   // Temperature & Humidity
@@ -93,20 +120,20 @@ void displayData(double dist, double temp, double hum, int gas) {
   display.drawLine(0, 15, 128, 15, WHITE);
 
   // Distance
-  display.setCursor(32, 16);
+  display.setCursor(33, 16);
   display.println("Distance:");
   
   display.setTextSize(2);
-  display.setCursor(32, 24);
+  display.setCursor(33, 24);
   display.println(String(dist, 0) + " cm");
-  display.setCursor(32, 39);
+  display.setCursor(33, 39);
   display.println(String(dist / 2.54, 0) + " in");
   
   // Gas
   String rating; // Store gas safety rating
-  if (gas >= 75) {
+  if (gas >= DANGER_THRESHOLD) {
     rating = "Danger!";
-  } else if (gas >= 50) {
+  } else if (gas >= GAS_THRESHOLD) {
     rating = "Unsafe";
   } else {
     rating = "Safe";
@@ -114,7 +141,7 @@ void displayData(double dist, double temp, double hum, int gas) {
   display.setTextSize(1);
   display.drawLine(0, 54, 128, 54, WHITE);
   display.setCursor(0, 56);
-  display.println("Gas: " + String(gas) + "%,");
+  display.println("Gas: " + String(gas, 1) + "%,");
   display.setCursor(72, 56);
   display.println(rating);
   
@@ -159,6 +186,12 @@ void setup() {
   // Set pin modes for ultrasonic sensor
   pinMode(ECHO_PIN, INPUT); 
   pinMode(TRIG_PIN, OUTPUT);
+
+  // NeoPixel setup
+  //pixels.begin(); // This initializes the NeoPixel library.
+
+  // Initialize the Buzzer
+  initBuzzer();
 }
 
 void loop() {
@@ -168,7 +201,8 @@ void loop() {
   temperature = int(AM2320.getTemperature() * 10) / 10.0; // Get temperature and round to one decimal
   humidity = int(AM2320.getHumidity() * 10) / 10.0; // Get humidity and round to one decimal
   
-  gas = map(readGas(), 0, 4095, 0, 100); // Get the gas level and scale it from 0 - 100
+  gas = map(readGas(), 0, 4095, 0, 1000) / 10.0; // Get the gas level and scale it from 0 - 100.0
+  playBuzzer(gas);
   
   //Serial.println(distance / 100.0); // Print in cm
   publisher.store("dist", distance / 100.0); // Send over wifi in cm
