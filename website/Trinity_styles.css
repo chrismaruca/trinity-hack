@@ -129,7 +129,7 @@ article.gallery h3 {
 }
 
 .slideshow-box {
-    max-width: min(550px, 100%)
+    max-width: min(550px, 100%);
 }
 
 .slideshow {
@@ -148,8 +148,15 @@ article.gallery h3 {
 .vertical-img {
     aspect-ratio: 3 / 4;
 }
+
 .horizontal-img {
     aspect-ratio: 16 / 9;
+}
+
+.slide-img {
+    width:100%;
+    height:auto;
+    display: block;
 }
 
 .prev, .next {
