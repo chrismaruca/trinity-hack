@@ -4,6 +4,16 @@ html {
     background-color: gray;
     font-size: 13px;
     font-family: "Open Sans", sans-serif;
+
+    /* hexagonal background pattern */
+    background:
+    radial-gradient(circle farthest-side at 0% 50%,grey 23.5%,rgba(240,166,17,0) 0)21px 30px,
+    radial-gradient(circle farthest-side at 0% 50%,black 24%,rgba(240,166,17,0) 0)19px 30px,
+    linear-gradient(grey 14%,rgba(240,166,17,0) 0, rgba(240,166,17,0) 85%,grey 0)0 0,
+    linear-gradient(150deg,grey 24%,black 0,black 26%,rgba(240,166,17,0) 0,rgba(240,166,17,0) 74%,black 0,black 76%,grey 0)0 0,
+    linear-gradient(30deg,grey 24%,black 0,black 26%,rgba(240,166,17,0) 0,rgba(240,166,17,0) 74%,black 0,black 76%,grey 0)0 0,
+    linear-gradient(90deg,black 2%,grey 0,grey 98%,black 0%)0 0 grey;
+    background-size: 40px 60px;
 }
 
 body {
