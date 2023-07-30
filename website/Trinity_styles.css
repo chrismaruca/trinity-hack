@@ -150,7 +150,7 @@ article.gallery h3 {
 }
 
 .horizontal-img {
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 4 / 3;
 }
 
 .slide-img {
@@ -161,16 +161,19 @@ article.gallery h3 {
 
 .prev, .next {
     cursor: pointer;
-    position: absolute;
-    top: 50%;
     width: auto;
     padding: 16px;
-    color: white;
-    font-weight: bold;
-    font-size: 18px;
     transition: 0.6s ease;
     user-select: none;
     border-radius: 0 3px 3px 0;
+
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .next {
@@ -220,8 +223,9 @@ article.gallery h3 {
     background-color: #2b528d;
     border-radius: 50%;
     display: inline-block;
+    transition: background-color 0.6s ease;
 }
 
-.active, .dot:hover {
+.active, .dots0:hover, .dots1:hover {
     background-color: #1d3963;
 }
