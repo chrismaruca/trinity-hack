@@ -49,6 +49,7 @@ observer.observe(gas, {attributes: true, characterData: true, subtree: true, chi
 // Slideshow code
 let curr_slide = [0, 0];
 let slide_arr = ["slides0", "slides1"];
+let dot_arr = ["dots0", "dots1"];
 
 // Show the first slide of every slideshow
 for (let s = 0; s < slide_arr.length; s++) {
@@ -65,19 +66,23 @@ function chooseSlide(index, n) {
 
 function renderSlides(index, n) {
     let slides = document.getElementsByClassName(slide_arr[n]);
+    let dots = document.getElementsByClassName(dot_arr[n]);
 
-    curr_slide[n] = index;
-
-    if (curr_slide[n] === slides.length) {
-        curr_slide[n] = 0;
-    } else if (curr_slide[n] < 0) {
-        curr_slide[n] = slides.length - 1;
+    if (index === slides.length) {
+        index = 0;
+    } else if (index < 0) {
+        index = slides.length - 1;
     }
 
     let i;
     for (i = 0; i < slides.length; i++) {
         slides[i].style.display = "none";
     }
+    for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }
 
-    slides[curr_slide[n]].style.display = "block";
+    curr_slide[n] = index;
+    slides[index].style.display = "block";
+    dots[index].className += " active";
 }

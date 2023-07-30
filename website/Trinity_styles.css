@@ -108,14 +108,32 @@ article.design {
 article.gallery {
     background-color: #417edc;
 }
+
 article.gallery h2 {
     color: white;
+}
+
+article.gallery h3 {
+    color:white;
     margin-bottom: 2px;
+    text-align: center;
 }
 
 /* Slideshow */
+.slideshow-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.slideshow-box {
+    max-width: min(550px, 100%)
+}
+
 .slideshow {
-    max-width: min(500px, 100%);
+    max-width: min(550px, 100%);
     max-height: auto;
     position: relative;
     margin: auto;
@@ -129,6 +147,9 @@ article.gallery h2 {
 
 .vertical-img {
     aspect-ratio: 3 / 4;
+}
+.horizontal-img {
+    aspect-ratio: 16 / 9;
 }
 
 .prev, .next {
@@ -179,4 +200,20 @@ article.gallery h2 {
     right: 2px;
 }
 
+.dot-row {
+    text-align: center;
+}
 
+.dots0, .dots1 {
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+    margin: 2px 2px;
+    background-color: #2b528d;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.active, .dot:hover {
+    background-color: #1d3963;
+}
