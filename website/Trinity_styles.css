@@ -180,6 +180,7 @@ article.gallery h3 {
     font-size: 15px;
     padding: 8px 12px;
     background-color: rgba(20,37,61,0.8);
+    text-align: center;
 
     /*center and bottom*/
     position: absolute;

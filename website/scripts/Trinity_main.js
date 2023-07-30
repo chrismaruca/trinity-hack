@@ -29,7 +29,7 @@ const observer = new MutationObserver((mutations) => {
             // Change the humidity rating
             if (hum.textContent > 60) {
                 hum_s.textContent = "Humid";
-            } else if (hum_s.textContent > 25) {
+            } else if (hum.textContent > 25) {
                 hum_s.textContent = "Comfortable";
             } else {
                 hum_s.textContent = "Dry";
@@ -44,7 +44,7 @@ const observer = new MutationObserver((mutations) => {
     }
 })
 
-observer.observe(gas, {attributes: true, characterData: true, subtree: true, childList: true});
+observer.observe(dist, {attributes: true, characterData: true, subtree: true, childList: true});
 
 // Slideshow code
 let curr_slide = [0, 0];
