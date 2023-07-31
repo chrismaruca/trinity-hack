@@ -48,8 +48,8 @@ observer.observe(dist, {attributes: true, characterData: true, subtree: true, ch
 
 // Slideshow code
 let curr_slide = [0, 0];
-let slide_arr = ["slides0", "slides1"];
-let dot_arr = ["dots0", "dots1"];
+let slide_arr = ["slides0", "slides1", "slides2"];
+let dot_arr = ["dots0", "dots1", "dots2"];
 
 // Show the first slide of every slideshow
 for (let s = 0; s < slide_arr.length; s++) {

@@ -111,10 +111,23 @@ div.data-box {
 /* Design styling */
 article.design {
     background-color: #ffde59;
+    padding: 10px 40px;
 }
 
 article.design h3 {
-    margin: 10px 0;
+    font-size: 20px;
+    margin: 4px 0 2px 0;
+}
+
+article.design li {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+article.design p, article.design li li {
+    margin: 2px;
+    font-weight: normal;
+    font-size: 13px;
 }
 
 /* Gallery styling */
@@ -154,7 +167,7 @@ article.gallery h3 {
     border: 2px solid black;
 }
 
-.slides0, .slides1 {
+.slides0, .slides1, .slides2 {
     display: none;
 }
 
@@ -228,7 +241,7 @@ article.gallery h3 {
     text-align: center;
 }
 
-.dots0, .dots1 {
+.dots0, .dots1, .dots2 {
     cursor: pointer;
     width: 15px;
     height: 15px;
